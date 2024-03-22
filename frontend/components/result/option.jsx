@@ -6,13 +6,14 @@ import defaultImage from "../../public/defaultImage.png"
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } }
 export default function Option(props) {
+    console.log("전체프롭스", props)
+
+    console.log("옵션프롭스", props.data)
     const data = props.data
-    const chosenOption = props.chosenOption
     const voted = props.voted
     const totalVoteCount = props.totalVoteCount
     const ratio = (props.data.voters.length / totalVoteCount) * 100
 
-    useEffect(() => {}, [chosenOption])
     return (
         <Box
             className="outerContainer"

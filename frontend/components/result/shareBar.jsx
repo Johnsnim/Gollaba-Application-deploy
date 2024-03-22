@@ -28,7 +28,7 @@ export default function ShareBar(props) {
         alert("클립보드에 복사되었습니다.")
     }
 
-    const newOptions = props.data.options.slice(0, 3).map((option) => ({
+    const newOptions = props.data.data.items.slice(0, 3).map((option) => ({
         title: option.description,
         description: "",
         imageUrl: typeof option.imageUrl === "string" ? option.imageUrl : defaultImageUrl,
@@ -44,7 +44,7 @@ export default function ShareBar(props) {
 
         Kakao.Share.sendDefault({
             objectType: "list",
-            headerTitle: props.data.title,
+            headerTitle: props.data.data.title,
             headerLink: {
                 mobileWebUrl: "https://www.gollaba.net/",
                 webUrl: "https://www.gollaba.net/",

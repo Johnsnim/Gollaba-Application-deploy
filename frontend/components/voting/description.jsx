@@ -13,8 +13,6 @@ export default function Description(props) {
     const data = props.data
     const name = data.creatorName
 
-    const date = new Date(props.data.endedAt)
-
     const today = new Date()
     const [userInfo, setUserInfo] = useState()
 
@@ -75,7 +73,7 @@ export default function Description(props) {
                         alignItems: "center",
                     }}
                 >
-                    ~{("" + data.endedAt).substring(0, 10)}
+                    ~{("" + data.endAt).substring(0, 10)}
                 </Box>
 
                 <Box

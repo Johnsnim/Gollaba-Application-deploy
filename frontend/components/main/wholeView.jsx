@@ -33,7 +33,7 @@ export default function WholeView() {
         if (totalCount !== 0 && offset * 15 >= totalCount) return
         setIsLoading(true)
         response = await ApiGateway.getPolls(offset, limit, cookies.accessToken)
-        setPolls([...polls, ...response.polls])
+        setPolls([...polls, ...response.data.items])
         setTotalCount(response.totalCount)
         setIsLoading(false)
     }

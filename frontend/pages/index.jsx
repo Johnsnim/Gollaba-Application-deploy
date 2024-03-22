@@ -32,14 +32,17 @@ export default function Main() {
     const limit = 10
 
     const getData = async () => {
+        /*
         topTenResponse = await ApiGateway.topPolls()
         setTopTenPolls([...topTenPolls, ...topTenResponse.polls])
 
         trendingResponse = await ApiGateway.trendingPolls()
         setTrendingPolls([...trendingPolls, ...trendingResponse.polls])
-
+        */
         response = await ApiGateway.getPolls(offset, limit)
-        setPolls([...polls, ...response.polls])
+        console.log(response.data.items)
+        //setPolls((prevPolls) => [...prevPolls, response.data.polls])
+        setPolls([...polls, ...response.data.items])
     }
 
     useEffect(() => {
@@ -76,8 +79,10 @@ export default function Main() {
                             maxHeight: "90vh",
                         }}
                     >
+                        {/*
                         <TopTen data={topTenPolls} menuTitle={"Ongoing Polls"} />
                         <OngoingPolls data={trendingPolls} menuTitle={"New Results!"} />
+                    */}
                         <WholeView data={polls} />
                     </Box>
 

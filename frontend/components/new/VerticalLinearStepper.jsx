@@ -111,9 +111,9 @@ export default function VerticalLinearStepper() {
         const payload = {
             title: titleRef.current.value,
             creatorName: nameRef.current.value,
-            ended_at: expireRef.current,
-            isBallot: optionsRef.current.isBallot,
             responseType: optionsRef.current.responseType,
+            pollType: optionsRef.current.isBallot,
+            endAt: expireRef.current,
         }
 
         if (userInfo?.accessToken !== undefined) {

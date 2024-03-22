@@ -13,12 +13,15 @@ import { useCookies } from "react-cookie"
 export default function Poll(props) {
     const router = useRouter()
     const data = props.data
-    const options = data.options
+    console.log("데이터", data)
+    const options = data.items
     const [isExtend, setIsExtend] = useState(false)
     const [favoriteId, setFavoriteId] = useState(data?.favorites?.favoritesId)
     const [cookies, setCookies, removeCookies] = useCookies([])
 
-    const date = new Date(props.data.endedAt)
+    console.log("el 우웅> ", props.data.endAt)
+
+    const date = new Date(props.data.endAt)
     const strDate = date.toISOString().substring(0, 10).split("-")
 
     const today = new Date()
@@ -41,8 +44,9 @@ export default function Poll(props) {
     })
 
     const buttonClick = () => {
+        console.log("당장지워", props.data)
         {
-            today < date ? router.push(`/polls/${props.data.pollId}`) : router.push(`/result/${props.data.pollId}`)
+            today < date ? router.push(`/polls/${props.data.id}`) : router.push(`/result/${props.data.id}`)
         }
     }
 
@@ -263,7 +267,7 @@ export default function Poll(props) {
                                 ) : (
                                     <></>
                                 )}
-                                {strDate[1] + "월 " + strDate[2] + "일까지 · " + props.data.totalVoteCount + "명 참여"}
+                                {strDate[1] + "월 " + strDate[2] + "일까지 · 조회수 " + props.data.readCount + "회"}
                             </Box>
 
                             <Box className="favorite" sx={{ display: "flex" }}>
