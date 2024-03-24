@@ -44,11 +44,15 @@ export default function VerticalLinearStepper() {
     const [activeStep, setActiveStep] = useState(0)
     const [isSubmit, setIsSubmit] = useState(false)
     const [userInfo, setUserInfo] = useState()
+    const [token, setToken] = useState("")
     useEffect(async () => {
         const token = getToken()
+        if (token !== null) setToken(token)
+        console.log("토큰", token)
 
         if (token !== null) {
             const userInfo = await fetchUser(token)
+            console.log("toen>>", userInfo)
             setUserInfo(userInfo)
         }
     }, [])
@@ -68,7 +72,7 @@ export default function VerticalLinearStepper() {
     ])
     const optionsRef = useRef({
         isBallot: false,
-        responseType: RESPONSE_TYPE_SIGNLE,
+        responseType: false,
     })
     const expireRef = useRef({})
     const handleNext = () => {
@@ -108,12 +112,14 @@ export default function VerticalLinearStepper() {
         const currentTimestamp = +new Date()
         const defaultEndedAt = new Date(currentTimestamp + 1000 * 60 * 60 * 24 * 7).toISOString()
 
+        let formattedDate = expireRef.current.toISOString().slice(0, 19)
+        console.log("수정된날짜", formattedDate)
         const payload = {
             title: titleRef.current.value,
             creatorName: nameRef.current.value,
-            responseType: optionsRef.current.responseType,
-            pollType: optionsRef.current.isBallot,
-            endAt: expireRef.current,
+            responseType: optionsRef.current.responseType ? "MULTIPLE" : "SINGLE",
+            pollType: optionsRef.current.isBallot ? "ANONYMOUS" : "NAMED",
+            endAt: formattedDate,
         }
 
         if (userInfo?.accessToken !== undefined) {
@@ -127,14 +133,14 @@ export default function VerticalLinearStepper() {
         for (let i = 0; i < itemsRef.current.length; i++) {
             const item = itemsRef.current[i].value
 
-            formData.append(`options[${i}].description`, item.description)
+            formData.append(`items[${i}].description`, item.description)
 
             if (item.imgUrl !== "" && item.imgUrl !== undefined) {
-                formData.append(`options[${i}].optionImage`, item.imgUrl)
+                formData.append(`items[${i}].image`, item.imgUrl)
             }
         }
 
-        const response = await ApiGateway.createPoll(formData)
+        const response = await ApiGateway.createPoll(formData, token)
 
         if (response.error) {
             alert(response.message)
@@ -143,6 +149,8 @@ export default function VerticalLinearStepper() {
         }
 
         router.push("/polls/" + response.pollId)
+
+        console.log("페이로드", payload)
     }
 
     const handleBack = () => {
@@ -276,9 +284,7 @@ const pollOptionStyles = makeStyles((theme) => ({
 function PollOptionsWrapper({ optionsRef }) {
     const classes = pollOptionStyles()
     const [checkedIsBallot, setCheckedIsBallot] = useState(optionsRef.current.isBallot)
-    const [checkedResponseType, setCheckedResponseType] = useState(
-        optionsRef.current.responseType === RESPONSE_TYPE_SIGNLE ? false : true
-    )
+    const [checkedResponseType, setCheckedResponseType] = useState(optionsRef.current.responseType)
 
     const handleChangeIsBallot = () => {
         optionsRef.current.isBallot = !optionsRef.current.isBallot
@@ -286,17 +292,8 @@ function PollOptionsWrapper({ optionsRef }) {
     }
 
     const handleChangeResponseType = () => {
-        if (optionsRef.current.responseType === RESPONSE_TYPE_SIGNLE) {
-            optionsRef.current.responseType = RESPONSE_TYPE_MULTI
-            setCheckedResponseType((prev) => !prev)
-            return
-        }
-
-        if (optionsRef.current.responseType === RESPONSE_TYPE_MULTI) {
-            optionsRef.current.responseType = RESPONSE_TYPE_SIGNLE
-            setCheckedResponseType((prev) => !prev)
-            return
-        }
+        optionsRef.current.responseType = !optionsRef.current.responseType
+        setCheckedResponseType((prev) => !prev)
     }
 
     return (

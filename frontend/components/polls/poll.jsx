@@ -51,9 +51,11 @@ export default function Poll(props) {
     }
     const favoriteClick = async (e) => {
         const hashId = data?.pollId
-        const payload = { pollId: hashId }
+        const payload = { pollHashId: hashId }
+        const token = localStorage.getItem("accessToken")
+        console.log("토큰 ", token)
         if (!favoriteId) {
-            const favoriteSend = await ApiGateway.makeFavorite(payload, cookies.accessToken)
+            const favoriteSend = await ApiGateway.makeFavorite(payload, token)
 
             if (favoriteSend?.error === true) {
                 alert(favoriteSend.message)
@@ -65,7 +67,7 @@ export default function Poll(props) {
             return
         }
 
-        const favoriteDelete = await ApiGateway.deleteFavorite(favoriteId, cookies.accessToken)
+        const favoriteDelete = await ApiGateway.deleteFavorite(favoriteId, token)
 
         if (favoriteDelete?.error === true) {
             // fail

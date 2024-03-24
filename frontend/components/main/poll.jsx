@@ -54,10 +54,11 @@ export default function Poll(props) {
         isExtend === true ? setIsExtend(false) : setIsExtend(true)
     }
     const favoriteClick = async (e) => {
-        const hashId = data?.pollId
-        const payload = { pollId: hashId }
+        const hashId = data?.id
+        const payload = { pollHashId: hashId }
+        const token = localStorage.getItem("accessToken")
         if (!favoriteId) {
-            const favoriteSend = await ApiGateway.makeFavorite(payload, cookies.accessToken)
+            const favoriteSend = await ApiGateway.makeFavorite(payload, token)
 
             if (favoriteSend?.error === true) {
                 alert("로그인 이후에 사용할 수 있는 기능입니다.")
@@ -67,7 +68,7 @@ export default function Poll(props) {
             return
         }
 
-        const favoriteDelete = await ApiGateway.deleteFavorite(favoriteId, cookies.accessToken)
+        const favoriteDelete = await ApiGateway.deleteFavorite(favoriteId, token)
 
         if (favoriteDelete?.error === true) {
             // fail
