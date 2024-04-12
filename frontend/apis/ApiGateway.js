@@ -38,7 +38,7 @@ const ApiGateway = {
     makeFavorite: async (payload, token) => ApiTemplate.sendApi(MethodType.POST, `v2/favorites`, payload, token),
     deleteFavorite: async (favoritesId, token) =>
         ApiTemplate.sendApi(MethodType.DELETE, `v2/favorites/${favoritesId}`, null, token),
-    getFavorites: async (token) => ApiTemplate.sendApi(MethodType.GET, `v1/favorites`, null, token),
+    getFavorites: async (token) => ApiTemplate.sendApi(MethodType.GET, `v2/favorites/me`, null, token),
     // Poll Controller
     createPoll: async (payload, token) => ApiTemplate.sendApiMultiPart(MethodType.POST, "/v2/polls", payload, token),
     getPolls: async (page, limit, token) =>
@@ -51,7 +51,7 @@ const ApiGateway = {
             token
         ),
     getPoll: async (pollId) => ApiTemplate.sendApi(MethodType.GET, `/v2/polls/${pollId}`),
-    vote: async (pollId, payload) => ApiTemplate.sendApi(MethodType.POST, `/v1/polls/${pollId}/vote`, payload),
+    vote: async (payload, token) => ApiTemplate.sendApi(MethodType.POST, `/v2/voting`, payload, token),
     updatePoll: async (pollId, payload, token) =>
         ApiTemplate.sendApi(MethodType.POST, `v1/polls/${pollId}/update`, payload, token),
     myPolls: async (token) => ApiTemplate.sendApi(MethodType.GET, `/v1/polls/me`, null, token),

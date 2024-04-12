@@ -17,7 +17,7 @@ import { useRouter } from "next/router"
 
 const PollTheme = createTheme(theme)
 
-export default function WholeView() {
+export default function WholeView({ data, favorites }) {
     const router = useRouter()
     const [polls, setPolls] = useState([])
     const [ref, inView] = useInView()
@@ -97,7 +97,7 @@ export default function WholeView() {
                             pr: 1.2,
                         }}
                     >
-                        <PollsMap data={polls} />
+                        <PollsMap data={polls} favorites={favorites} />
                     </Box>
                 </Box>
                 <Box ref={ref} />

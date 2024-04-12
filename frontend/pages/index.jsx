@@ -15,6 +15,7 @@ import FooterNav from "../components/footerNav"
 import PollsMap from "../components/polls/mapPoll"
 import theme from "../src/theme"
 import ApiGateway from "../apis/ApiGateway"
+import jwt_decode from "jwt-decode"
 
 import OngoingPolls from "../components/main/ongoingPolls"
 import TopTen from "../components/main/TopTen"
@@ -26,6 +27,7 @@ export default function Main() {
     const [polls, setPolls] = useState([])
     const [topTenPolls, setTopTenPolls] = useState([])
     const [trendingPolls, setTrendingPolls] = useState([])
+    const [favoritesData, setFavoritesData] = useState([])
 
     let response, topTenResponse, trendingResponse
     const offset = 0
@@ -40,9 +42,14 @@ export default function Main() {
         setTrendingPolls([...trendingPolls, ...trendingResponse.polls])
         */
         response = await ApiGateway.getPolls(offset, limit)
-        console.log(response.data.items)
         //setPolls((prevPolls) => [...prevPolls, response.data.polls])
         setPolls([...polls, ...response.data.items])
+
+        const token = getToken()
+        if (token !== null) {
+            const favorites = await ApiGateway.getFavorites(token)
+            setFavoritesData(favorites)
+        }
     }
 
     useEffect(() => {
@@ -83,7 +90,7 @@ export default function Main() {
                         <TopTen data={topTenPolls} menuTitle={"Ongoing Polls"} />
                         <OngoingPolls data={trendingPolls} menuTitle={"New Results!"} />
                     */}
-                        <WholeView data={polls} />
+                        <WholeView data={polls} favorites={favoritesData} />
                     </Box>
 
                     <div className="footer">
@@ -93,4 +100,18 @@ export default function Main() {
             </Container>
         </ThemeProvider>
     )
+}
+
+function getToken() {
+    const token = localStorage.getItem("accessToken")
+
+    if (token === null) return null
+
+    const { exp } = jwt_decode(token)
+    const expiredDate = new Date(exp * 1000)
+    const now = new Date()
+
+    if (expiredDate < now) return null
+
+    return token
 }

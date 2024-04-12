@@ -10,34 +10,31 @@ import { useRouter } from "next/router"
 const label = { inputProps: { "aria-label": "Checkbox demo" } }
 
 export default function CreateBtn(props) {
+    console.log(props)
     const router = useRouter()
     const [nickname, setNickname] = useState("")
-    const [cookies, setCookies, removeCookies] = useCookies({})
 
+    console.log("라우터", router.query.pollId)
     const nicknameChanged = (event) => {
         setNickname(event.target.value)
     }
 
     const btnClicked = async () => {
-        const userId = null
-
-        if (Object.keys(cookies).length !== 0) {
-            const decoded = jwt_decode(cookies.accessToken)
-            userId = decoded.id
-        }
+        const token = getToken()
+        const { uid } = jwt_decode(token)
 
         const payload = {
-            optionIds: props.voted,
-            // pollId: Number(props.pollId),
-            userId: userId,
-            voterName: nickname.length !== 0 ? nickname : null,
+            pollId: router.query.pollId,
+            pollItemIds: props.voted,
+            userId: uid,
+            voterName: nickname.length !== 0 ? nickname : "익명",
         }
 
-        const response = await ApiGateway.vote(props.pollId, payload)
+        const response = await ApiGateway.vote(payload, token)
         if (response?.error) {
             alert(response.message)
             if (response.code === 20004) {
-                router.push("/result/" + props.pollId)
+                // router.push("/result/" + props.pollId)
             }
             return
         }
@@ -99,4 +96,12 @@ export default function CreateBtn(props) {
             </Box>
         </Box>
     )
+}
+
+function getToken() {
+    const token = localStorage.getItem("accessToken")
+
+    if (token === null) return null
+
+    return token
 }

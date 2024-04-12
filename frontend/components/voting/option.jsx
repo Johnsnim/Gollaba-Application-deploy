@@ -7,6 +7,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } }
 export default function Option(props) {
     const data = props.data
     const index = props.index
+
     const chosenOption = props.chosenOption
     const voted = props.voted
     const setVoted = props.setVoted
@@ -14,28 +15,28 @@ export default function Option(props) {
 
     const optionClick = () => {
         //단일투표 && 비활성화
-        if (responseType === "SINGLE" && voted.indexOf(data.optionId) === -1) {
+        if (responseType === "SINGLE" && voted.indexOf(data.id) === -1) {
             if (voted.length >= 1) voted.pop()
-            setVoted([...voted, data.optionId])
+            setVoted([...voted, data.id])
             return
         }
 
         //복수투표 && 비활성화
-        if (responseType === "MULTI" && voted.indexOf(data.optionId) === -1) {
-            setVoted([...voted, data.optionId])
+        if (responseType === "MULTI" && voted.indexOf(data.id) === -1) {
+            setVoted([...voted, data.id])
             return
         }
 
         //복수투표 && 활성화
-        if (responseType === "MULTI" && voted.indexOf(data.optionId) !== -1) {
-            voted.splice(voted.indexOf(data.optionId), 1)
+        if (responseType === "MULTI" && voted.indexOf(data.id) !== -1) {
+            voted.splice(voted.indexOf(data.id), 1)
 
-            setVoted([...voted, data.optionId])
+            setVoted([...voted, data.id])
             return
         }
 
         //단일투표 && 활성화
-        voted.splice(voted.indexOf(data.optionId), 1)
+        voted.splice(voted.indexOf(data.id), 1)
         setVoted([...voted])
     }
 
@@ -46,7 +47,7 @@ export default function Option(props) {
             className="outerContainer"
             compomemt="button"
             onClick={optionClick}
-            backgroundColor={voted.indexOf(data.optionId) === -1 ? "rgb(230, 230, 230)" : "rgb(130, 130, 130)"}
+            backgroundColor={voted.indexOf(data.id) === -1 ? "rgb(230, 230, 230)" : "rgb(130, 130, 130)"}
             sx={{
                 maxWidth: "100%",
                 mt: 1.5,

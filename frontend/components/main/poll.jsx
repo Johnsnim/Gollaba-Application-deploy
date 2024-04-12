@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Box from "@mui/material/Box"
 import { useRouter } from "next/router"
 import AccountCircleIcon from "@mui/icons-material/AccountCircle"
@@ -13,18 +13,30 @@ import { useCookies } from "react-cookie"
 export default function Poll(props) {
     const router = useRouter()
     const data = props.data
-    console.log("데이터", data)
+    const favoritesData = props.favorites.data
+
     const options = data.items
     const [isExtend, setIsExtend] = useState(false)
-    const [favoriteId, setFavoriteId] = useState(data?.favorites?.favoritesId)
+    const [favoriteId, setFavoriteId] = useState([])
     const [cookies, setCookies, removeCookies] = useCookies([])
 
-    console.log("el 우웅> ", props.data.endAt)
+    if (favoriteId.includes(data.id)) {
+        console.log("포함")
+    } else {
+        console.log("미포함", favoriteId.includes(data.id))
+        console.log(favoriteId)
+        console.log(data.id)
+    }
 
     const date = new Date(props.data.endAt)
     const strDate = date.toISOString().substring(0, 10).split("-")
-
     const today = new Date()
+
+    useEffect(() => {
+        if (favoritesData && favoritesData.length > 0) {
+            setFavoriteId((prev) => [...prev, ...favoritesData])
+        }
+    }, [favoritesData])
 
     let temp = 0
     for (let i = 0; i < options.length; i++) {
@@ -44,7 +56,6 @@ export default function Poll(props) {
     })
 
     const buttonClick = () => {
-        console.log("당장지워", props.data)
         {
             today < date ? router.push(`/polls/${props.data.id}`) : router.push(`/result/${props.data.id}`)
         }
@@ -57,16 +68,23 @@ export default function Poll(props) {
         const hashId = data?.id
         const payload = { pollHashId: hashId }
         const token = localStorage.getItem("accessToken")
-        if (!favoriteId) {
+        console.log("로그 1")
+        console.log("로그 2", payload)
+        console.log("들어가는 값은 ", hashId)
+
+        if (token === null) {
+            alert("로그인 이후에 사용할 수 있는 기능입니다.")
+            return
+        }
+
+        if (favoriteId !== null && !favoriteId.includes(data.id)) {
+            console.log("로그 3")
             const favoriteSend = await ApiGateway.makeFavorite(payload, token)
 
-            if (favoriteSend?.error === true) {
-                alert("로그인 이후에 사용할 수 있는 기능입니다.")
-                return
-            }
             setFavoriteId(favoriteSend?.favoritesId)
             return
         }
+        console.log("로그 4")
 
         const favoriteDelete = await ApiGateway.deleteFavorite(favoriteId, token)
 
@@ -76,11 +94,6 @@ export default function Poll(props) {
             return
         }
         setFavoriteId(null)
-
-        const date = new Date(props.data.endedAt)
-        const strDate = date.toISOString().substring(0, 10).split("-")
-
-        const today = new Date()
     }
 
     return (
@@ -273,7 +286,7 @@ export default function Poll(props) {
 
                             <Box className="favorite" sx={{ display: "flex" }}>
                                 <IconButton onClick={favoriteClick}>
-                                    {favoriteId ? (
+                                    {favoriteId !== null && favoriteId !== undefined && favoriteId.includes(data.id) ? (
                                         <>
                                             <StarIcon />
                                         </>
