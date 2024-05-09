@@ -20,14 +20,6 @@ export default function Poll(props) {
     const [favoriteId, setFavoriteId] = useState([])
     const [cookies, setCookies, removeCookies] = useCookies([])
 
-    if (favoriteId.includes(data.id)) {
-        console.log("포함")
-    } else {
-        console.log("미포함", favoriteId.includes(data.id))
-        console.log(favoriteId)
-        console.log(data.id)
-    }
-
     const date = new Date(props.data.endAt)
     const strDate = date.toISOString().substring(0, 10).split("-")
     const today = new Date()
@@ -55,9 +47,21 @@ export default function Poll(props) {
         )
     })
 
-    const buttonClick = () => {
+    const buttonClick = async () => {
+        if (today > date) {
+            router.push(`/result/${props.data.id}`)
+            return
+        }
+
+        const token = localStorage.getItem("accessToken")
+        if (token === null) router.push(`/polls/${props.data.id}`)
+
+        const payload = { pollHashId: props.data.id }
+        const response = await ApiGateway.isVoted(payload, token)
         {
-            today < date ? router.push(`/polls/${props.data.id}`) : router.push(`/result/${props.data.id}`)
+            response.data
+                ? router.push(`/result/${props.data.id}&isVoted=true`)
+                : router.push(`/polls/${props.data.id}`)
         }
     }
 
@@ -68,9 +72,6 @@ export default function Poll(props) {
         const hashId = data?.id
         const payload = { pollHashId: hashId }
         const token = localStorage.getItem("accessToken")
-        console.log("로그 1")
-        console.log("로그 2", payload)
-        console.log("들어가는 값은 ", hashId)
 
         if (token === null) {
             alert("로그인 이후에 사용할 수 있는 기능입니다.")
@@ -78,22 +79,20 @@ export default function Poll(props) {
         }
 
         if (favoriteId !== null && !favoriteId.includes(data.id)) {
-            console.log("로그 3")
             const favoriteSend = await ApiGateway.makeFavorite(payload, token)
 
-            setFavoriteId(favoriteSend?.favoritesId)
+            setFavoriteId((prev) => [...prev, data.id])
             return
         }
-        console.log("로그 4")
 
-        const favoriteDelete = await ApiGateway.deleteFavorite(favoriteId, token)
+        const favoriteDelete = await ApiGateway.deleteFavorite(payload, token)
 
         if (favoriteDelete?.error === true) {
             // fail
             alert(favoriteDelete.message)
             return
         }
-        setFavoriteId(null)
+        setFavoriteId((prev) => prev.filter((id) => id !== data.id))
     }
 
     return (
@@ -314,6 +313,7 @@ export default function Poll(props) {
                                     borderRadius: "5px",
                                     marginBottom: 0,
                                     height: 35,
+                                    cursor: "pointer",
                                 }}
                             >
                                 투표하기

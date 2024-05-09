@@ -6,19 +6,19 @@ import defaultImage from "../../public/defaultImage.png"
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } }
 export default function Option(props) {
-    console.log("전체프롭스", props)
-
-    console.log("옵션프롭스", props.data)
     const data = props.data
-    const voted = props.voted
-    const totalVoteCount = props.totalVoteCount
-    const ratio = (props.data.voters.length / totalVoteCount) * 100
+    const voted = props.selected
+    let totalVoteCount = props.data.votingCount
+    if (totalVoteCount === undefined) totalVoteCount = 10
+
+    console.log("프롭스234324234", props)
+    const ratio = (data.votingCount / totalVoteCount) * 100
 
     return (
         <Box
             className="outerContainer"
             compomemt="button"
-            backgroundColor={voted.indexOf(data.optionId) === -1 ? "rgb(230, 230, 230)" : "rgb(130, 130, 130)"}
+            //backgroundColor={voted.indexOf(data.optionId) === -1 ? "rgb(230, 230, 230)" : "rgb(130, 130, 130)"}
             sx={{
                 maxWidth: "100%",
                 mt: 1,
@@ -34,7 +34,7 @@ export default function Option(props) {
                 alignItems: "center",
                 fontSize: 22,
                 flex: 0.2,
-                backgroundColor: totalVoteCount === 0 ? "#9c9e9f" : "rgb(156, 158, 159)",
+                //backgroundColor: totalVoteCount === 0 ? "#9c9e9f" : "rgb(156, 158, 159)",
             }}
         >
             <Box
@@ -60,7 +60,7 @@ export default function Option(props) {
                     display: "flex",
                     borderColor: "grey.500",
                     flexDirection: "row",
-                    backgroundColor: "skyblue",
+                    //backgroundColor: "skyblue",
                     flexDirection: "row",
                     //justifyContent: "left",
                     alignItems: "center",
@@ -80,9 +80,10 @@ export default function Option(props) {
                         fontSize: 13,
                         flex: 0.2,
                         pt: 2,
+                        minWidth: "100px",
                     }}
                 >
-                    ({props.data.voters.length}명)
+                    ({data.votingCount}명)
                 </Box>
             </Box>
         </Box>

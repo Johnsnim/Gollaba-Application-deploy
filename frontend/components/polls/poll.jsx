@@ -12,13 +12,14 @@ import { useCookies } from "react-cookie"
 
 export default function Poll(props) {
     const router = useRouter()
+
     const data = props.data
-    const options = data.options
+    const options = data.items
     const [isExtend, setIsExtend] = useState(false)
     const [favoriteId, setFavoriteId] = useState(data?.favorites?.favoritesId)
     const [cookies, setCookies, removeCookies] = useCookies([])
 
-    const date = new Date(props.data.endedAt)
+    const date = new Date(props.data.endAt)
     const strDate = date.toISOString().substring(0, 10).split("-")
 
     const today = new Date()
@@ -34,7 +35,7 @@ export default function Poll(props) {
                 {el.description}
                 <LinearProgress
                     variant="determinate"
-                    value={props.data.totalVoteCount !== 0 ? (el.voteCount / props.data.totalVoteCount) * 100 : 0}
+                    value={props.data.totalVotingCount !== 0 ? (el.voteCount / props.data.totalVotingCount) * 100 : 0}
                 />
             </Box>
         )
@@ -42,7 +43,7 @@ export default function Poll(props) {
 
     const buttonClick = () => {
         {
-            today < date ? router.push(`/polls/${props.data.pollId}`) : router.push(`/result/${props.data.pollId}`)
+            today < date ? router.push(`/polls/${props.data.id}`) : router.push(`/result/${props.data.id}`)
         }
     }
 
@@ -53,7 +54,7 @@ export default function Poll(props) {
         const hashId = data?.pollId
         const payload = { pollHashId: hashId }
         const token = localStorage.getItem("accessToken")
-        console.log("토큰 ", token)
+
         if (!favoriteId) {
             const favoriteSend = await ApiGateway.makeFavorite(payload, token)
 
@@ -273,7 +274,12 @@ export default function Poll(props) {
                                 ) : (
                                     <></>
                                 )}
-                                {strDate[1] + "월 " + strDate[2] + "일까지 · " + props.data.totalVoteCount + "명 참여"}
+                                {strDate[1] +
+                                    "월 " +
+                                    strDate[2] +
+                                    "일까지 · " +
+                                    props.data.totalVotingCount +
+                                    "명 참여"}
                             </Box>
 
                             <Box className="favorite" sx={{ display: "flex" }}>

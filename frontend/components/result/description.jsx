@@ -5,9 +5,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } }
 export default function Description(props) {
-    const data = props.data.data
-
+    const data = props.data
     const strDate = data.endAt.substring(0, 10).split("-")
+    console.log("체크체크", props)
 
     return (
         <Box
@@ -54,7 +54,7 @@ export default function Description(props) {
                     }}
                 >
                     <Typography sx={{ fontSize: 12, letterSpacing: 0, pl: 0, pt: 0.6, color: "rgb(192, 192, 192)" }}>
-                        {strDate[1] + "월 " + strDate[2] + "일 종료 · " + data.totalVoteCount + "명 참여"}
+                        {strDate[1] + "월 " + strDate[2] + "일 종료 · " + data.totalVotingCount + "명 참여"}
                     </Typography>
                 </Box>
                 <Box

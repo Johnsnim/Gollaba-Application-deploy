@@ -3,8 +3,8 @@ import Option from "./option"
 
 const MapOption = (props) => {
     console.log("ㅍㄽ", props)
-    const data = props.data.data.items
-    const voted = props.voted
+    const data = props.data.items
+    const selected = props.selected
 
     if (!data) return <></>
 
@@ -15,7 +15,9 @@ const MapOption = (props) => {
   });
   */
 
-    return data.map((el, index) => <Option data={el} voted={voted} totalVoteCount={props.data.totalVoteCount} />)
+    return data.map((el, index) => (
+        <Option data={el} selected={selected} totalVoteCount={props.data.totalVotingCount} />
+    ))
 }
 
 export default MapOption

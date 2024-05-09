@@ -30,6 +30,8 @@ const newPageStyles = makeStyles((theme) => ({
 export default function OngoingPolls(props) {
     // const classes = newPageStyles();
 
+    console.log("프롭스확인>>", props)
+
     const scrollRef = useRef(null)
     const [isDrag, setIsDrag] = useState(false)
     const [startX, setStartX] = useState()
@@ -64,6 +66,7 @@ export default function OngoingPolls(props) {
 
     const PollsMap = () => {
         const data = props.data
+        if (data.length === 0) return
         return data.map((el) => <OngoingPollsPoll data={el} unclickable={unclickable} />)
     }
     return (

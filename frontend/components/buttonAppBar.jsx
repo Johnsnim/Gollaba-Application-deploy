@@ -38,17 +38,27 @@ export default function ButtonAppBar(title) {
     const LoginButtonOnClick = () => {
         router.push("/login")
     }
+
+    const LogoOnClick = () => {
+        router.push("/")
+    }
     const handleSubmit = (event) => {
         event.preventDefault()
         router.push(`/search/${inputRef.current.value}`)
     }
+
+    console.log("유저인포", userInfo)
 
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="fixed" color="default" sx={{ boxShadow: "none" }}>
                 <Toolbar>
                     <Box sx={{ display: "flex", flex: 1 }}>
-                        <img src={LogoImage.src} style={{ width: 50, height: "auto", marginLeft: -5, marginTop: 0 }} />
+                        <img
+                            src={LogoImage.src}
+                            onClick={LogoOnClick}
+                            style={{ width: 50, height: "auto", marginLeft: -5, marginTop: 0 }}
+                        />
                         <Typography
                             variant="h6"
                             component="div"
@@ -63,6 +73,7 @@ export default function ButtonAppBar(title) {
                             display: "flex",
                             flex: 3,
                             justifyContent: "flex-end",
+                            alignItems: "center",
                             marginLeft: "auto",
                         }}
                     >
@@ -108,14 +119,14 @@ export default function ButtonAppBar(title) {
                                 mr: -7,
                                 minWidth: "100px",
                                 justifyContent: "flex-end",
-                                pt: 0.8,
+                                alignItems: "center",
                             }}
                         >
                             {userInfo ? (
                                 <Box className="IconButton" onClick={IconButtonOnClick}>
                                     <Avatar
-                                        src={userInfo.profileImageUrl}
-                                        sx={{ width: 40, height: 40, border: "5px soild black" }}
+                                        src={userInfo.data.profileImageUrl}
+                                        sx={{ width: 45, height: 45, border: "5px soild black" }}
                                     />
                                 </Box>
                             ) : (

@@ -32,7 +32,7 @@ export default function WholeView({ data, favorites }) {
     const getData = async () => {
         if (totalCount !== 0 && offset * 15 >= totalCount) return
         setIsLoading(true)
-        response = await ApiGateway.getPolls(offset, limit, cookies.accessToken)
+        response = await ApiGateway.getPolls(offset, limit, null)
         setPolls([...polls, ...response.data.items])
         setTotalCount(response.totalCount)
         setIsLoading(false)
@@ -70,6 +70,7 @@ export default function WholeView({ data, favorites }) {
                             boxShadow: "0 0 5px 1px rgba(0,0,0,0.055)",
                         }}
                     >
+                        {/*
                         <form onSubmit={handleSubmit}>
                             <button type="submit" style={{ backgroundColor: "transparent", border: "none" }}>
                                 🔍
@@ -81,6 +82,7 @@ export default function WholeView({ data, favorites }) {
                                 ref={inputRef}
                             />
                         </form>
+                    */}
                     </Box>
                 </Box>
 

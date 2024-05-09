@@ -21,13 +21,16 @@ export default function Profile() {
     const PROFILE_BASIC = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
 
     const showUser = async () => {
-        if (!token.current || !userId.current) return
+        console.log("체크")
+        //if (!token.current || !userId.current) return
 
         const userInfo = await ApiGateway.showUser(userId.current, token.current)
         setData(userInfo)
+        console.log("유저인포", userInfo)
     }
     useEffect(() => {
         token.current = localStorage.getItem("accessToken")
+        console.log(token.current, "토큰")
 
         userId.current = jwt_decode(token.current).id
     }, [])
@@ -37,8 +40,8 @@ export default function Profile() {
 
     //Profile, Background Image 변경
     const profileImageSrc = () => {
-        if (data?.profileImageUrl == null) return PROFILE_BASIC
-        return data?.profileImageUrl
+        if (data?.data.profileImageUrl == null) return PROFILE_BASIC
+        return data?.data.profileImageUrl
     }
     const backgroundImageSrc = () => {
         if (data?.backgroundImageUrl == null) return BACKGROUND_BASIC
@@ -60,11 +63,12 @@ export default function Profile() {
         const photoToAdd = e.target.files[0]
 
         const formData = new FormData()
-        formData.append("profileImage", photoToAdd)
-        formData.append("updateType", "PROFILE_IMAGE")
+        formData.append("image", photoToAdd)
+        //formData.append("updateType", "PROFILE_IMAGE")
 
-        const profileChange = await ApiGateway.updateForm(formData, token.current)
+        const profileChange = await ApiGateway.changeImage(formData, token.current)
         setData(profileChange)
+        console.log(profileChange)
     }
     const changeBackground = async (e) => {
         if (!token.current) return
@@ -87,10 +91,11 @@ export default function Profile() {
     const changeNickname = async () => {
         if (!token.current) return
 
-        const formData = new FormData()
-        formData.append("nickName", nickName)
-        formData.append("updateType", "NICKNAME")
-        const nickChange = await ApiGateway.updateForm(formData, token.current)
+        const payload = {
+            name: nickName,
+        }
+
+        const nickChange = await ApiGateway.changeName(payload, token.current)
         setData(nickChange)
         location.reload()
     }
@@ -200,7 +205,7 @@ export default function Profile() {
                         }}
                     >
                         <Box sx={{ pl: 4 }}>
-                            {data?.nickName}
+                            {data?.data.name}
                             <IconButton
                                 aria-label="edit"
                                 onClick={() => {

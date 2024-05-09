@@ -14,6 +14,8 @@ import InfoBox from "../../components/result/infoBox"
 import { useRouter } from "next/router"
 import ApiGateway from "../../apis/ApiGateway"
 import ShareBar from "../../components/result/shareBar"
+import removeBtn from "../../components/result/revoteBtn"
+import RevoteBtn from "../../components/result/revoteBtn"
 
 const theme = createTheme({
     palette: {
@@ -28,30 +30,45 @@ const theme = createTheme({
 })
 
 export default function Voting() {
-    const router = useRouter()
-    let response
-    const { pollId } = router.query
-    const [selected, setSelected] = useState([])
+    const [selected, setSelected] = useState({})
     const [polls, setPolls] = useState([])
     const [isFetch, setIsFetch] = useState(false)
+    const router = useRouter()
+    let response
+    let { pollId } = router.query
+    let isVoted = false
+
+    if (pollId !== undefined && pollId.includes("&")) {
+        pollId = pollId.split("&")[0]
+        isVoted = true
+    }
 
     const getData = async () => {
         response = await ApiGateway.getPoll(pollId)
-        setPolls(response)
+        console.log("반드시쳌,", response)
+        setPolls(response.data)
     }
 
     const readCount = async () => {
         response = await ApiGateway.readCount(pollId)
     }
 
+    const chosenItems = async () => {
+        const token = getToken()
+        if (token === null) return
+        response = await ApiGateway.chosenItem(router.query.pollId, token)
+        console.log(response.data)
+        setSelected(response.data)
+    }
+
     useEffect(async () => {
         if (pollId) {
             await getData()
             readCount()
+            chosenItems()
             setIsFetch(true)
         }
     }, [pollId])
-    const [voted, setVoted] = useState([])
 
     return (
         <ThemeProvider theme={theme}>
@@ -92,7 +109,13 @@ export default function Voting() {
                                             //justifyContent: "center",
                                         }}
                                     >
-                                        <MapOption data={polls} voted={voted} />
+                                        <MapOption data={polls} selected={selected} />
+                                        {isVoted === true && (
+                                            <>
+                                                <RevoteBtn />
+                                            </>
+                                        )}
+
                                         <ShareBar data={polls} />
                                     </Box>
                                 </Box>
@@ -107,4 +130,11 @@ export default function Voting() {
             </Container>
         </ThemeProvider>
     )
+}
+function getToken() {
+    const token = localStorage.getItem("accessToken")
+
+    if (token === null) return null
+
+    return token
 }

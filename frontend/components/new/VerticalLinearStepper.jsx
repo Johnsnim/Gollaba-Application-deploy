@@ -48,7 +48,6 @@ export default function VerticalLinearStepper() {
     useEffect(async () => {
         const token = getToken()
         if (token !== null) setToken(token)
-        console.log("토큰", token)
 
         if (token !== null) {
             const userInfo = await fetchUser(token)
@@ -148,9 +147,7 @@ export default function VerticalLinearStepper() {
             return
         }
 
-        router.push("/polls/" + response.pollId)
-
-        console.log("페이로드", payload)
+        router.push("/polls/" + response.data.id)
     }
 
     const handleBack = () => {

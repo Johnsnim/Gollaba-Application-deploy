@@ -31,9 +31,15 @@ const theme = createTheme({
 export default function Polls() {
     const router = useRouter()
     let response
-    const { pollId } = router.query
+    let { pollId } = router.query
     const [selected, setSelected] = useState([])
     const [polls, setPolls] = useState([])
+    let isVoted = false
+
+    if (pollId !== undefined && pollId.includes("&")) {
+        pollId = pollId.split("&")[0]
+        isVoted = true
+    }
 
     const getData = async () => {
         response = await ApiGateway.getPoll(pollId)
@@ -41,7 +47,9 @@ export default function Polls() {
     }
 
     const readCount = async () => {
-        response = await ApiGateway.readCount(pollId)
+        if (localStorage.getItem("accessToken") !== null) {
+            response = await ApiGateway.readCount(pollId)
+        }
     }
 
     useEffect(() => {
@@ -113,4 +121,12 @@ export default function Polls() {
 const optionAmount = (polls) => {
     if (polls.responseType === "SINGLE") return "한 개의 문항을 선택해주세요."
     return "한 개 이상의 문항을 선택해주세요."
+}
+
+function getToken() {
+    const token = localStorage.getItem("accessToken")
+
+    if (token === null) return null
+
+    return token
 }

@@ -15,15 +15,22 @@ const EXPIRED_ACCESS_TOKEN = "액세스 토큰이 만료되었습니다."
 const ApiTemplate = {
     sendApi: async (method, url, body, token) => {
         let result = null
-        const authorizationHeader = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        }
+        const authorizationHeader =
+            token !== null
+                ? {
+                      headers: {
+                          Authorization: `Bearer ${token}`,
+                      },
+                  }
+                : {}
 
         if (body) {
             try {
-                result = await instance[method](url, body, authorizationHeader)
+                if (method === "delete") {
+                    result = await instance.delete(url, { ...authorizationHeader, data: body })
+                } else {
+                    result = await instance[method](url, body, authorizationHeader)
+                }
             } catch (e) {
                 if (e.response.status === 401 && e.message === EXPIRED_ACCESS_TOKEN) {
                 }
@@ -31,7 +38,7 @@ const ApiTemplate = {
                 return e.response.data
             }
 
-            return result.datas
+            return result.data
         }
 
         try {

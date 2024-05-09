@@ -30,9 +30,9 @@ export default function Voting() {
     let response
     const limit = 15
 
-    const getData = async token => {
+    const getData = async (token) => {
         setIsLoading(true)
-        response = await ApiGateway.myPolls(token)
+        response = await ApiGateway.getMyPolls(token)
         setPolls([...polls, ...response.polls])
         setTotalCount(response.totalCount)
         setIsLoading(false)
@@ -50,7 +50,7 @@ export default function Voting() {
 
     useEffect(() => {
         if (inView && !isLoading) {
-            setOffset(prevState => prevState + 1)
+            setOffset((prevState) => prevState + 1)
         }
     }, [inView, isLoading])
 

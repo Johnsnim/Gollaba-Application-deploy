@@ -1,28 +1,36 @@
 import React, { useState, useEffect } from "react"
-import CssBaseline from "@mui/material/CssBaseline"
-import Container from "@mui/material/Container"
 import Typography from "@mui/material/Typography"
 import Box from "@mui/material/Box"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { width } from "@mui/system"
 import Options from "./options"
-import Router from "next/router"
+import { useRouter } from "next/router"
+import ApiGateway from "./../../apis/ApiGateway"
 
 export default function TopTenPoll(props) {
-    const handleClick = () => {
-        if (props.unclickable === false)
-            today < date ? Router.push(`/polls/${props.data.pollId}`) : Router.push(`/result/${props.data.pollId}`)
+    const router = useRouter()
+    const handleClick = async () => {
+        if (props.unclickable === true) return
+        if (today > date) {
+            router.push(`/result/${props.data.id}`)
+            return
+        }
+
+        const token = localStorage.getItem("accessToken")
+        if (token === null) router.push(`/polls/${props.data.id}`)
+        const payload = { pollHashId: props.data.id }
+        const response = await ApiGateway.isVoted(payload, token)
+        {
+            response.data
+                ? router.push(`/result/${props.data.id}&isVoted=true`)
+                : router.push(`/polls/${props.data.id}`)
+        }
     }
     const OptionsMap = () => {
         const data = props.data.options
-        return data.map(el => <Options data={el} />)
+        return data.map((el) => <Options data={el} />)
     }
 
-    const date = new Date(props.data.endedAt)
-    const strDate = date
-        .toISOString()
-        .substring(0, 10)
-        .split("-")
+    const date = new Date(props.data.endAt)
+    const strDate = date.toISOString().substring(0, 10).split("-")
 
     const today = new Date()
 
@@ -42,6 +50,7 @@ export default function TopTenPoll(props) {
                 flexDirection: "column",
                 //alignItems: "flex-end",
                 mt: 0.8,
+                cursor: "pointer",
             }}
             onClick={handleClick}
         >
@@ -104,7 +113,7 @@ export default function TopTenPoll(props) {
                 }}
             >
                 <Typography sx={{ fontSize: 12, letterSpacing: 0, pl: 1.5, pt: 0.6, color: "rgb(192, 192, 192)" }}>
-                    {strDate[1] + "월 " + strDate[2] + "일까지 · " + props.data.totalVoteCount + "명 참여"}
+                    {strDate[1] + "월 " + strDate[2] + "일 종료 · " + props.data.totalVotingCount + "명 참여"}
                 </Typography>
             </Box>
         </Box>
