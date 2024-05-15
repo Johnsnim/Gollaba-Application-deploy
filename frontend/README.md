@@ -1,46 +1,39 @@
-# Next.js example
+## Gollaba-Application
 
-## How to use
+<p align="middle" >
+  <img width="200px;" src="https://github.com/Moon-Jang/Gollaba-Application/blob/1f8a6184074564126c2ade707bc23c8f87e28a54/frontend/public/Gollaba_logo_Nonuki.png?raw=true"/>
+</p>
+<h1 align="middle">🗳 Gollaba </h1>
+<p align="middle">쉽고 빠른 투표! 초간단 투표 플랫폼 Gollaba 입니다!</p>
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+## 🗳 프로젝트 소개
+안녕하세요! 새로운 투표 플랫폼 'Gollaba'에 오신 것을 환영합니다. 여러분의 의견을 표현할 수 있는 공간으로, 누구나 쉽게 투표를 만들고 공유하기 위해 개발되었습니다.
 
-<!-- #default-branch-switch -->
+'Gollaba'에서는 원활한 투표를 위한 여러가지 기능을 제공합니다. 기본적으로 익명 투표 & 복수 투표 기능, 중복 투표 방지 기능을 제공하며 보다 명확한 선택지 제공을 위한 이미지 첨부 기능 또한 제공해드리고 있습니다. 또한 생성한 투표에 대한 공유 기능을 통해 친구, 팀원, 지인들에게서 투표를 독려할 수 있습니다. 
 
-```sh
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2  material-ui-master/examples/nextjs
-cd nextjs
-```
+'Gollaba'를 이용해서 여러분의 의견을 표현하세요! 감사합니다.
 
-Install it and run:
+## 🛠 사용 기술 스택
+### 프론트엔드
+- React
+- Next.js
+- JWT
+- Webpack
+- Material-Ui
 
-```sh
-npm install
-npm run dev
-```
+### 백엔드
+- Spring boot
+- Gradle
+- Spring Data JPA
+- Mockito
+- JUnit 5
+- MySQL
+- AWS Web Service
+- Docker
+- OAuth 2.0
+- JWT
 
-or:
-
-<!-- #default-branch-switch -->
-
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/nextjs)
-
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/mui/material-ui/tree/master/examples/nextjs)
-
-## The idea behind the example
-
-The project uses [Next.js](https://github.com/vercel/next.js), which is a framework for server-rendered React apps.
-It includes `@mui/material` and its peer dependencies, including `emotion`, the default style engine in MUI v5.
-If you prefer, you can [use styled-components instead](https://mui.com/material-ui/guides/interoperability/#styled-components).
-
-## The link component
-
-Next.js has [a custom Link component](https://nextjs.org/docs/api-reference/next/link).
-The example folder provides adapters for usage with MUI.
-More information [in the documentation](https://mui.com/material-ui/guides/routing/#next-js).
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation, continuing browsing it from the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+## 팀원 소개
+- Moon-Jang - Back End (https://github.com/Moon-Jang)
+- Digital-Hamster - Back End (https://github.com/digital-hamster)
+- Johnsnim - Front End (https://github.com/Johnsnim)

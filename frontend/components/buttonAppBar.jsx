@@ -77,6 +77,7 @@ export default function ButtonAppBar(title) {
                             marginLeft: "auto",
                         }}
                     >
+                        {/*
                         <Box
                             sx={{
                                 display: "flex",
@@ -87,6 +88,7 @@ export default function ButtonAppBar(title) {
                                 marginLeft: "auto",
                             }}
                         >
+                           
                             {isSearchClick ? (
                                 <Box>
                                     <form onSubmit={handleSubmit}>
@@ -114,6 +116,7 @@ export default function ButtonAppBar(title) {
                                 onClick={() => setIsSearchClick(true)}
                             />
                         </Box>
+                        */}
                         <Box
                             sx={{
                                 mr: -7,
