@@ -5,7 +5,8 @@ import { useState } from "react"
 // axios.defaults.withCredentials = true;
 
 const instance = axios.create({
-    baseURL: "https://dev-api.gollaba.app",
+    //baseURL: "https://dev-api.gollaba.app",
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     timeout: 100000,
     //withCredentials: true,
 })

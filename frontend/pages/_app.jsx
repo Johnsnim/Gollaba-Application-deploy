@@ -6,7 +6,13 @@ import CssBaseline from "@mui/material/CssBaseline"
 import { CacheProvider } from "@emotion/react"
 import theme from "../src/theme"
 import createEmotionCache from "../src/createEmotionCache"
+import dotenv from "dotenv"
 
+dotenv.config()
+
+console.log("DB_HOST:", process.env.NEXT_PUBLIC_RUN_MODE)
+console.log("DB_USER:", process.env.DB_USER)
+console.log("DB_PASS:", process.env.DB_PASS)
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache()
 
